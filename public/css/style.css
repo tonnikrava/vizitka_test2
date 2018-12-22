@@ -45,7 +45,7 @@ mark { background-color: rgba(255, 132, 0, 0.32);padding: 0px 6px 4px 7px;}
 
 @media (min-width: 992px) {
 .h1block{height: auto;margin: 118px 0 23px 0}		
-.textpodh1{width: 70%; margin:45px auto 53px auto; } 	
+.textpodh12{width: 70%; margin:45px auto 53px auto; }
 }
 
 @media (min-width: 1200px) {
