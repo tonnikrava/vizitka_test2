@@ -3,114 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use Validator;
 use TCG\Voyager\Models\Page;
-use App\Client;
+use TCG\Voyager\Models\Category;
+use TCG\Voyager\Models\Post;
+use App\Nowosti;
+use App\Tovari;
+
 
 class MainController extends Controller
 {
-    public function getIndex()
+    public function getIndex() //Вывод главной страницы
     {
-
-        echo view('index');
-    }
-
-    public function spets($page)
-    {
-        $material = Page::where('slug', '=', $page)->get();
-
-        return view('spets')->with('material', $material);
+        $material = Page::where('slug', '=', 'index')->get();
+        $novosti = Nowosti::latest()->limit(4)->get();
+        return view('index')->with([
+            'novosti' => $novosti,
+            'material' => $material
+        ]);
     }
 
 
-    public function forma(Request $request)
+    public function newss() // вывод оглавлений новостей
+    {
+        $novostis = Nowosti::latest()->get();
+
+        if (!$novostis->count()) {
+            abort(404); // проверка на не существ страницу с ошибкой 404
+        } else {
+            return view('newss')->with('novostis', $novostis);
+        }
+    }
+
+    public function news($page) // вывод одной новости
+    {
+        $novosti = Nowosti::where('slug', '=', $page)->get();
+
+        if (!$novosti->count()) {
+            abort(404); // проверка на не существ страницу с ошибкой 404
+        } else {
+            return view('news')->with('novosti', $novosti);
+        }
+    }
+
+    public function category($tovar) // Вывод страницы или товара из категории
+    {
+        $material = Page::where('slug', '=', $tovar)->get();
+        if (!$material->count()) {    // ЕСЛИ НЕТУ ТАКОГО материала уходим к товарам
+            $cat = Tovari::where('category_id', '=', $tovar)->get();
+            $catname = Category::where('slug', '=', $tovar)->get(); // запрос в категории что бы вывести название категории
+            if (!$cat->count()) { // ЕСЛИ НЕТУ ТАКОГО товара выводим 404
+                abort(404); // проверка на не существ страницу с ошибкой 404
+            } else {
+                return view('cat')->with(
+                    [
+                        'catname' => $catname,
+                        'cat' => $cat
+                    ]);
+            }
+        } else {
+            return view('stranitsi')->with('material', $material);
+        }
+    }
+
+    public function tovar($catid, $tovarid) // Вывод товара из категории
     {
 
-        if ($request->isMethod('post')) {
-
-
-            $input = $request->except('_token', 'photo', 'file'); //'file'
-
-
-            $massages = [
-
-                'required' => 'Поле :attribute обязательно к заполнению',
-                'unique' => 'Поле :attribute должно быть уникальным'
-
-            ];
-
-
-            $validator = Validator::make($input, [
-
-                'name' => 'required|max:255',
-                'surname' => 'required|max:255',
-                'surname' => 'required|max:255',
-                'countryviza' => 'required|max:255',
-                'photo.*' => 'required'
-
-            ], $massages);
-
-            if ($validator->fails()) {
-                return redirect()->route('forma')->withErrors($validator)->withInput();
-            }
-
-            $surname = $input['name'];
-            $fotki = $request->file('photo.*');
-            // $failiki = $request->file('file.*');
-
-
-            $ii = 1; //$ifile=1;
-            foreach ($request->file('photo.*') as $key => $file) {
-
-                $ii++;
-                $origname = $file->getClientOriginalName();
-                $key = "clients/";
-                $file->move(public_path() . '/storage/clients', "$surname$origname");
-                $photoname = $key . $surname . $origname;
-                $input += ['photo' . $ii => $photoname];
-            }
-
-            /* foreach ($request->file('file.*') as $key => $files) {
-
-                 $ifile++;
-                 $orignames = $files->getClientOriginalName();
-                 $keys = "clients/";
-                 $files->move(public_path().'/storage/clients',"$surname$orignames");
-                 $filename = $keys.$surname.$orignames;
-                 $input += ['file'.$ifile=>$filename];
-
-
-
-             }*/
-
-
-            //dd ($input);
-            $page = new Client();
-
-
-            $page->unguard();
-
-            $page->fill($input);
-
-            if ($page->save()) {
-                return redirect('forma')->with('status', 'Информация добавлена');
-            }
-
+        $cat = Category::where('slug', '=', $catid)->get();
+        $tovar = Tovari::where('slug', '=', $tovarid)->get();
+        if (!$tovar->count()) { // ЕСЛИ НЕТУ ТАКОГО товара выводим 404
+            abort(404); // проверка на не существ страницу с ошибкой 404
+        } else {
+            return view('tovar')->with(
+                [
+                    'catname' => $cat,
+                    'tovar' => $tovar
+                ]);
         }
 
 
-        if (view()->exists('forma')) {
-
-
-            return view('forma');
-
-        }
-
-        abort(404);
-
-
     }
+
+
 }
-
-

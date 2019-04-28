@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Routes номер два
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
@@ -11,13 +11,19 @@
 |
 */
 
+
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
-Route::match(['get','post'],'forma',['uses'=>'MainController@forma','as'=>'forma']);
-Route::get('{page}',['uses'=>'MainController@spets','as'=>'spets']);
-Route::get('/',['uses'=>'MainController@getIndex','as'=>'indexpage']);
+Route::get('/',['uses'=>'MainController@getIndex','as'=>'home']);
+Route::get('news', ['uses' => 'MainController@newss', 'as' => 'newss']);
+
+
+
+Route::get('{tovar}', ['uses' => 'MainController@category', 'as' => 'page']);
+Route::get('news/{page}', ['uses' => 'MainController@news', 'as' => 'news']);
+Route::get('{catid}/{tovarid}', ['uses' => 'MainController@tovar', 'as' => 'tovar']);
 
 
 

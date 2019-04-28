@@ -1,5 +1,11 @@
 @extends('default.maintemplate')
 
+@section('mainheader')
+    <title>Form </title>
+    <meta name="keywords" content="Ukrainian universities ">
+    <meta name="description" content="We present to your attention ">
+@endsection
+
 @section('navbar')
     @parent
 @endsection
@@ -9,106 +15,90 @@
 @endsection
 
 @section('content')
+    <div class="container-fluid mx-0" style="background-color: #f7f7f7;">
+        <div class="container p-5">
+            <div class="row">
+                <div class="col-sm-12 col-xl-7 mx-auto p-5 bg-white position-relative">
+                    @if (count($errors) > 0)
+                        <div class="warningalert alert-danger mb-3 p-2" style="width:100%; font-size: 0.8em;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                                </ul>
+                        </div>
+                    @endif
 
-    <div class="container">
-
-
-        {!! Form::open(['url' => route('forma'),'class'=>'form-horizontal','method'=>'POST','enctype'=>'multipart/form-data']) !!}
-
-
-        <div class="form-group row">
-
-            {!! Form::label('name','Название',['class' => 'control-label col-md-2'])   !!}
-            <div class="col-md-10">
-                {!! Form::text('name',old('name'),['class' => 'form-control','placeholder'=>'Введите название страницы'])!!}
-            </div>
-
-        </div>
-        <div class="form-group row">
-            {!! Form::label('surname', 'Псевдоним:',['class'=>'control-label col-md-2']) !!}
-            <div class="col-md-10">
-                {!! Form::text('surname', old('surname'), ['class' => 'form-control','placeholder'=>'Фамилия']) !!}
-            </div>
-        </div>
-
-
-        <div class="form-group row">
-            {!! Form::label('country', 'Псевдоним:',['class'=>'control-label col-md-2']) !!}
-            <div class="col-md-10">
-                {!! Form::text('country', old('country'), ['class' => 'form-control','placeholder'=>'страна ']) !!}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            {!! Form::label('countryviza', 'Псевдоним:',['class'=>'control-label col-md-2']) !!}
-            <div class="col-md-10">
-                {!! Form::text('countryviza', old('countryviza'), ['class' => 'form-control','placeholder'=>'странаviza ']) !!}
-            </div>
-        </div>
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert" style="width:100%; font-size: 0.95em;">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
 
 
+                    {!! Form::open(['url' => route('forma'),'class'=>'form-horizontal','method'=>'POST','enctype'=>'multipart/form-data']) !!}
 
 
+                    <div class="form-group">
+                        {!! Form::label('name','Name',['class' => 'control-label'])   !!}
+                        {!! Form::text('name',old('name'),['class' => 'form-control','placeholder'=>'Name'])!!}
+                    </div>
 
-        <div class="form-group row">
-            <label class="control-label col-md-2">Изображение:</label>
-            <div class="col-md-10">
-                <input type="file" class="filestyle form-control" name="photo[]">
-            </div>
-        </div>
+                    <div class="form-group">
+                        {!! Form::label('surname', 'Name:',['class'=>'control-label']) !!}
+                        {!! Form::text('surname', old('surname'), ['class' => 'form-control','placeholder'=>'Surname']) !!}
 
-        <div class="form-group row">
-            <label for="imagess" class="control-label col-md-2">Изображение:</label>
-            <div class="col-md-10">
-                <input type="file" class="filestyle form-control" name="photo[]">
-            </div>
-        </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('mail','E-mail',['class' => 'control-label'])   !!}
+                        {!! Form::text('mail',old('mail'),['class' => 'form-control','placeholder'=>'e-mail'])!!}
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                                                                           else.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('country', 'Country:',['class'=>'control-label']) !!}
+                        {!! Form::text('country', old('country'), ['class' => 'form-control','placeholder'=>'Country ']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('countryviza', 'Visa country:',['class'=>'control-label']) !!}
+                        {!! Form::text('countryviza', old('countryviza'), ['class' => 'form-control','placeholder'=>'странаviza ']) !!}
+                    </div>
+                    <div class="form-group mt-5">
+                        <label class="control-label">Passport Datapage (Traveling document)</label>
+                        <input style="margin-top: 9px;" type="file" class="filestyle form-control" name="photo[]">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagess" class="control-label">School certificate 1</label>
+                        <input type="file" class="filestyle form-control" name="photo[]">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagess" class="control-label">School certificate 2 (if available)</label>
+                        <input type="file" class="filestyle form-control" name="photo[]">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagess" class="control-label">University Certificate (if available)</label>
+                        <input type="file" class="filestyle form-control" name="photo[]">
+                    </div>
+                    <div class="form-group">
+                        <label for="imagess" class="control-label">Other educational document (if available)</label>
+                        <input type="file" class="filestyle" name="photo[]">
+                    </div>
 
-        <div class="form-group row">
-            <label for="imagess" class="control-label col-md-2">Изображение:</label>
-            <div class="col-md-10">
-                <input type="file" class="filestyle form-control" name="photo[]">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="imagess" class="control-label col-md-2">Изображение:</label>
-            <div class="col-md-10">
-                <input type="file" class="filestyle form-control" name="photo[]"  >
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="imagess" class="control-label col-md-2">Изображение:</label>
-            <div class="col-md-10">
-                <input type="file" class="filestyle" name="photo[]" >
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-xs-offset-2 col-xs-10">
-                {!! Form::button('Сохранить', ['class' => 'btn btn-primary','type'=>'submit']) !!}
-            </div>
-        </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            {!! Form::button('Send', ['class' => 'btn btn-primary','type'=>'submit']) !!}
+                        </div>
+                    </div>
 
 
+                    {!! Form::close() !!}
 
-        {!! Form::close() !!}
 
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+                </div>
             </div>
         </div>
-
-        </div>
-
+    </div>
 
 
 
@@ -118,22 +108,19 @@
 
 @endsection
 
-@if (count($errors) > 0)
-    <div style="width:200px; height: 400px; color: #00acee; position: absolute;">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
-@if (session('status'))
-    <div style="width:200px; height: 400px; color: #00acee; position: absolute;">
-        {{ session('status') }}
-    </div>
-@endif
+
+
 
 @section('footer')
     @parent
 @endsection
+
+<div id="counter"></div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/2.1.0/bootstrap-filestyle.min.js"></script>
