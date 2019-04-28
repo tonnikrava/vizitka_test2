@@ -23,7 +23,7 @@ Route::get('news', ['uses' => 'MainController@newss', 'as' => 'newss']);
 
 Route::get('{tovar}', ['uses' => 'MainController@category', 'as' => 'page']);
 Route::get('news/{page}', ['uses' => 'MainController@news', 'as' => 'news']);
-Route::get('{catid}/{tovarid}', ['uses' => 'MainController@tovar', 'as' => 'tovar']);
+Route::get('{catid}/{tovarid}', ['uses' => 'MainController@tovar', 'as' => 'tovar']);//нихрена не заливается
 
 
 
